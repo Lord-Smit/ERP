@@ -11,3 +11,5 @@ boto3
 pillow
 python-dateutil
 weasyprint
+gunicorn
+dj-database-url

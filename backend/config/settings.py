@@ -90,6 +90,14 @@ if os.getenv('DB_HOST'):
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 
+# PostgreSQL config via DATABASE_URL (used in Render / Heroku / production):
+if os.getenv('DATABASE_URL'):
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=True,
+    )
+
 AUTH_USER_MODEL = 'accounts.User'
 
 AUTHENTICATION_BACKENDS = [
