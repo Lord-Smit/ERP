@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4; margin: 15mm; }
+  * { box-sizing: border-box; }
+  body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 11px; color: #1f2937; margin: 0; padding: 0; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 2px solid #2563eb; }
+  .header .company h1 { font-size: 20px; color: #2563eb; margin: 0 0 4px 0; }
+  .header .company p { margin: 2px 0; color: #6b7280; font-size: 10px; }
+  .header .title { text-align: right; }
+  .header .title h2 { font-size: 26px; color: #1f2937; margin: 0; letter-spacing: 2px; }
+  .header .title .status { display: inline-block; padding: 4px 14px; border-radius: 12px; font-size: 10px; font-weight: bold; margin-top: 6px; }
+  .status-active { background: #d1fae5; color: #059669; }
+  .status-completed { background: #f3f4f6; color: #6b7280; }
+  .status-terminated { background: #fee2e2; color: #dc2626; }
+  .status-draft { background: #fef3c7; color: #d97706; }
+  .info-grid { display: flex; justify-content: space-between; margin-bottom: 24px; }
+  .info-grid .box { width: 48%; }
+  .info-grid .box h4 { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #6b7280; margin: 0 0 6px 0; }
+  .info-grid .box p { margin: 2px 0; font-size: 11px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+  thead th { background: #f9fafb; color: #6b7280; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; padding: 8px 10px; text-align: left; border-bottom: 2px solid #e5e7eb; }
+  thead th.right { text-align: right; }
+  tbody td { padding: 8px 10px; border-bottom: 1px solid #f3f4f6; font-size: 10px; }
+  tbody td.right { text-align: right; }
+  .charges { margin-top: 20px; }
+  .charges .row { display: flex; justify-content: space-between; padding: 4px 10px; font-size: 11px; border-bottom: 1px solid #f3f4f6; }
+  .charges .row.total { font-size: 14px; font-weight: bold; border-top: 2px solid #1f2937; padding-top: 6px; margin-top: 4px; border-bottom: none; }
+  .signature { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; }
+  .signature .sig-line { display: flex; justify-content: space-between; margin-top: 40px; }
+  .signature .sig-line div { width: 45%; }
+  .signature .sig-line .line { border-top: 1px solid #1f2937; padding-top: 4px; font-size: 10px; text-align: center; }
+  .footer { margin-top: 30px; padding-top: 15px; border-top: 1px solid #e5e7eb; font-size: 9px; color: #9ca3af; text-align: center; }
+  .notes { margin-top: 20px; padding: 12px; background: #f9fafb; border-radius: 6px; font-size: 10px; }
+  .notes h4 { margin: 0 0 4px 0; font-size: 10px; color: #6b7280; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="company">
+    <h1>ERP Rental</h1>
+    <p>Equipment Rental Management</p>
+    <p>contracts@erprental.com | +91-1234567890</p>
+  </div>
+  <div class="title">
+    <h2>CONTRACT</h2>
+    <span class="status status-{{ contract.status }}">{{ contract.status|title }}</span>
+  </div>
+</div>
+
+<div class="info-grid">
+  <div class="box">
+    <h4>Customer</h4>
+    <p><strong>{{ contract.customer_name }}</strong></p>
+  </div>
+  <div class="box" style="text-align:right">
+    <h4>Contract Details</h4>
+    <p><strong>Contract #:</strong> {{ contract.contract_number }}</p>
+    <p><strong>Type:</strong> {{ contract.contract_type|title }}</p>
+    <p><strong>Start Date:</strong> {{ contract.start_date }}</p>
+    {% if contract.end_date %}<p><strong>End Date:</strong> {{ contract.end_date }}</p>{% endif %}
+  </div>
+</div>
+
+<div class="info-grid">
+  <div class="box">
+    <h4>Payment Terms</h4>
+    <p>{{ contract.payment_terms|default:'Standard 30-day terms' }}</p>
+  </div>
+  <div class="box" style="text-align:right">
+    {% if contract.amendment_number > 0 %}
+    <p><strong>Amendment #:</strong> {{ contract.amendment_number }}</p>
+    {% endif %}
+    {% if contract.auto_renew %}<p><em>Auto-renewal enabled ({{ contract.renewal_reminder_days }} day reminder)</em></p>{% endif %}
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:35%">Equipment</th>
+      <th>Period</th>
+      <th class="right">Qty</th>
+      <th class="right">Unit Price</th>
+      <th class="right">Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in contract.line_items %}
+    <tr>
+      <td><strong>{{ item.equipment_name|default:item.description }}</strong></td>
+      <td>{{ item.rental_period|title }}</td>
+      <td class="right">{{ item.quantity }}</td>
+      <td class="right">₹{{ item.unit_price|floatformat:2 }}</td>
+      <td class="right">₹{{ item.line_total|floatformat:2 }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5" style="color:#9ca3af;text-align:center;padding:20px;">No line items</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="charges">
+  {% if contract.value %}
+  <div class="row total"><span>Total Contract Value</span><span>₹{{ contract.value|floatformat:2 }}</span></div>
+  {% endif %}
+  {% if contract.mobilization_charges %}
+  <div class="row"><span>Mobilization Charges</span><span>₹{{ contract.mobilization_charges|floatformat:2 }}</span></div>
+  {% endif %}
+  {% if contract.demobilization_charges %}
+  <div class="row"><span>Demobilization Charges</span><span>₹{{ contract.demobilization_charges|floatformat:2 }}</span></div>
+  {% endif %}
+  {% if contract.security_deposit %}
+  <div class="row"><span>Security Deposit</span><span>₹{{ contract.security_deposit|floatformat:2 }}</span></div>
+  {% endif %}
+  {% if contract.insurance_amount %}
+  <div class="row"><span>Insurance Amount</span>{% if contract.insurance_policy_number %}<span>Policy: {{ contract.insurance_policy_number }} — ₹{{ contract.insurance_amount|floatformat:2 }}</span>{% else %}<span>₹{{ contract.insurance_amount|floatformat:2 }}</span>{% endif %}</div>
+  {% endif %}
+</div>
+
+{% if contract.notes %}
+<div class="notes">
+  <h4>Terms & Conditions / Notes</h4>
+  <p>{{ contract.notes }}</p>
+</div>
+{% endif %}
+
+<div class="signature">
+  <h4 style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#6b7280;margin:0 0 4px 0;">Signatures</h4>
+  {% if contract.signed_by_client %}
+  <p style="font-size:10px;color:#059669;">✓ Signed by client on {{ contract.signed_at|date:'d M Y, h:i A' }}</p>
+  {% for sig in contract.signatures.all %}
+  <div style="margin:10px 0;">
+    <p style="font-size:10px;color:#374151;margin:0 0 2px 0;"><strong>{{ sig.signatory_name }}</strong> — {{ sig.signatory_email|default:'' }}</p>
+    {% if sig.signature_data|slice:':11' == 'data:image/' %}
+    <img src="{{ sig.signature_data }}" alt="Signature" style="max-height:50px;border:1px solid #e5e7eb;border-radius:4px;padding:4px;" />
+    {% endif %}
+  </div>
+  {% endfor %}
+  {% else %}
+  <p style="font-size:10px;color:#dc2626;">✗ Not yet signed by client</p>
+  {% endif %}
+  <div class="sig-line">
+    <div>
+      <p style="font-size:10px;color:#6b7280;">Authorized Signatory — ERP Rental</p>
+      <div class="line">_________________________</div>
+    </div>
+    <div>
+      <p style="font-size:10px;color:#6b7280;">Client Representative</p>
+      <div class="line">_________________________</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>This is a computer-generated contract. Terms and conditions apply.</p>
+  <p>ERP Rental — Equipment Management System</p>
+</div>
+
+</body>
+</html>

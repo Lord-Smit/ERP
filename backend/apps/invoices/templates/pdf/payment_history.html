@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4 landscape; margin: 12mm; }
+  * { box-sizing: border-box; }
+  body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 10px; color: #1f2937; margin: 0; padding: 0; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #2563eb; }
+  .header .company h1 { font-size: 18px; color: #2563eb; margin: 0 0 4px 0; }
+  .header .company p { margin: 2px 0; color: #6b7280; font-size: 10px; }
+  .header .title { text-align: right; }
+  .header .title h2 { font-size: 22px; color: #1f2937; margin: 0; letter-spacing: 2px; }
+  .header .title .subtitle { font-size: 10px; color: #6b7280; margin-top: 4px; }
+  .filters { margin-bottom: 16px; padding: 8px 12px; background: #f9fafb; border-radius: 6px; font-size: 10px; color: #6b7280; }
+  .filters span { margin-right: 16px; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: #f9fafb; color: #6b7280; font-size: 8px; text-transform: uppercase; letter-spacing: 1px; padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb; }
+  thead th.right { text-align: right; }
+  tbody td { padding: 5px 8px; border-bottom: 1px solid #f3f4f6; font-size: 9px; }
+  tbody td.right { text-align: right; }
+  tbody tr:nth-child(even) { background: #fafafa; }
+  .summary { margin-top: 16px; padding-top: 10px; border-top: 2px solid #e5e7eb; }
+  .summary .row { display: flex; justify-content: flex-end; padding: 3px 0; font-size: 11px; }
+  .summary .row.total { font-size: 14px; font-weight: bold; padding-top: 4px; }
+  .footer { margin-top: 20px; padding-top: 10px; border-top: 1px solid #e5e7eb; font-size: 8px; color: #9ca3af; text-align: center; }
+  .status-paid { color: #059669; }
+  .empty { text-align: center; padding: 40px; color: #9ca3af; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="company">
+    <h1>ERP Rental</h1>
+    <p>Equipment Rental Management</p>
+  </div>
+  <div class="title">
+    <h2>PAYMENT HISTORY</h2>
+    <div class="subtitle">Generated on {{ generated_at }}</div>
+  </div>
+</div>
+
+{% if filters %}
+<div class="filters">
+  {% if filters.date_from %}<span><strong>From:</strong> {{ filters.date_from }}</span>{% endif %}
+  {% if filters.date_to %}<span><strong>To:</strong> {{ filters.date_to }}</span>{% endif %}
+  {% if filters.customer %}<span><strong>Customer:</strong> {{ filters.customer }}</span>{% endif %}
+  {% if filters.payment_mode %}<span><strong>Mode:</strong> {{ filters.payment_mode }}</span>{% endif %}
+</div>
+{% endif %}
+
+{% if payments %}
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Invoice #</th>
+      <th>Customer</th>
+      <th class="right">Amount</th>
+      <th>Mode</th>
+      <th>Reference</th>
+      <th>Recorded By</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in payments %}
+    <tr>
+      <td>{{ p.payment_date }}</td>
+      <td>{{ p.invoice_number }}</td>
+      <td>{{ p.customer_name }}</td>
+      <td class="right">₹{{ p.amount_paid|floatformat:2 }}</td>
+      <td>{{ p.payment_mode_display|default:p.payment_mode }}</td>
+      <td>{{ p.reference_number|default:'—' }}</td>
+      <td>{{ p.created_by_name|default:'—' }}</td>
+      <td>{{ p.notes|default:'—' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="summary">
+  <div class="row"><span>Total Payments: {{ summary.count }}</span><span style="margin-left:40px;">Total Amount: ₹{{ summary.total|floortrunc:2|default:'0.00' }}</span></div>
+</div>
+{% else %}
+<div class="empty">No payments found matching the selected filters.</div>
+{% endif %}
+
+<div class="footer">
+  <p>ERP Rental — Equipment Management System | This is a computer-generated report</p>
+</div>
+
+</body>
+</html>

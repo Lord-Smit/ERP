@@ -1,0 +1,13 @@
+Django>=4.2,<5.0
+djangorestframework>=3.14
+djangorestframework-simplejwt
+django-cors-headers
+django-filter
+drf-spectacular
+psycopg2-binary
+python-dotenv
+django-storages
+boto3
+pillow
+python-dateutil
+weasyprint

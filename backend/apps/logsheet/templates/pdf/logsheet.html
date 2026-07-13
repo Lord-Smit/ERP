@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: A4; margin: 15mm; }
+  * { box-sizing: border-box; }
+  body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 11px; color: #1f2937; margin: 0; padding: 0; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #2563eb; }
+  .header .company h1 { font-size: 18px; color: #2563eb; margin: 0 0 4px 0; }
+  .header .company p { margin: 2px 0; color: #6b7280; font-size: 10px; }
+  .header .title { text-align: right; }
+  .header .title h2 { font-size: 22px; color: #1f2937; margin: 0; letter-spacing: 2px; }
+  .header .title .status { display: inline-block; padding: 4px 14px; border-radius: 12px; font-size: 10px; font-weight: bold; margin-top: 6px; }
+  .status-draft { background: #f3f4f6; color: #6b7280; }
+  .status-submitted { background: #dbeafe; color: #2563eb; }
+  .status-operator_approved { background: #e0e7ff; color: #4f46e5; }
+  .status-approved { background: #d1fae5; color: #059669; }
+  .status-rejected { background: #fee2e2; color: #dc2626; }
+  .status-flagged { background: #fef3c7; color: #d97706; }
+  .info-grid { display: flex; justify-content: space-between; margin-bottom: 20px; }
+  .info-grid .box { width: 48%; }
+  .info-grid .box h4 { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #6b7280; margin: 0 0 6px 0; }
+  .info-grid .box p { margin: 2px 0; font-size: 11px; }
+  .section { margin-bottom: 20px; }
+  .section h3 { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #6b7280; margin: 0 0 8px 0; padding-bottom: 4px; border-bottom: 1px solid #e5e7eb; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { background: #f9fafb; color: #6b7280; font-size: 9px; text-transform: uppercase; letter-spacing: 1px; padding: 6px 8px; text-align: left; border-bottom: 2px solid #e5e7eb; }
+  thead th.right { text-align: right; }
+  tbody td { padding: 6px 8px; border-bottom: 1px solid #f3f4f6; font-size: 10px; }
+  tbody td.right { text-align: right; }
+  .stats { display: flex; gap: 10px; margin-bottom: 20px; }
+  .stats .card { flex: 1; text-align: center; padding: 10px; background: #f9fafb; border-radius: 6px; }
+  .stats .card .value { font-size: 16px; font-weight: bold; color: #1f2937; }
+  .stats .card .label { font-size: 8px; text-transform: uppercase; letter-spacing: 1px; color: #6b7280; margin-top: 2px; }
+  .footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #e5e7eb; font-size: 9px; color: #9ca3af; text-align: center; }
+  .notes { padding: 10px; background: #f9fafb; border-radius: 6px; font-size: 10px; margin-top: 12px; }
+  .notes h4 { margin: 0 0 4px 0; font-size: 10px; color: #6b7280; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="company">
+    <h1>ERP Rental</h1>
+    <p>Equipment Rental Management</p>
+  </div>
+  <div class="title">
+    <h2>LOGSHEET</h2>
+    <span class="status status-{{ logsheet.status }}">{{ logsheet.status_display }}</span>
+  </div>
+</div>
+
+<div class="info-grid">
+  <div class="box">
+    <h4>Equipment</h4>
+    <p><strong>{{ logsheet.equipment_name }}</strong></p>
+    {% if logsheet.equipment_serial %}<p>Serial: {{ logsheet.equipment_serial }}</p>{% endif %}
+    {% if logsheet.site_name %}<p>Site: {{ logsheet.site_name }}</p>{% endif %}
+  </div>
+  <div class="box" style="text-align:right">
+    <h4>Shift</h4>
+    <p><strong>{{ logsheet.shift_display }}</strong></p>
+    <p>{{ logsheet.date }}</p>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="card"><div class="value">{{ logsheet.total_hours|default:'—' }}</div><div class="label">Total Hrs</div></div>
+  <div class="card"><div class="value">{{ logsheet.productive_hours|default:'—' }}</div><div class="label">Prod. Hrs</div></div>
+  <div class="card"><div class="value">{{ logsheet.idle_hours|default:'—' }}</div><div class="label">Idle Hrs</div></div>
+  <div class="card"><div class="value">{{ logsheet.breakdown_hours|default:'—' }}</div><div class="label">Breakdown Hrs</div></div>
+</div>
+
+{% if logsheet.shift_start %}
+<div class="section">
+  <h3>Shift Timing</h3>
+  <table>
+    <thead><tr><th>Shift Start</th><th>Break Start</th><th>Break End</th><th>Shift End</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>{{ logsheet.shift_start|time:'h:i A' }}</td>
+        <td>{{ logsheet.break_start|time:'h:i A'|default:'—' }}</td>
+        <td>{{ logsheet.break_end|time:'h:i A'|default:'—' }}</td>
+        <td>{{ logsheet.shift_end|time:'h:i A'|default:'—' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% if logsheet.meter_start or logsheet.meter_end %}
+<div class="section">
+  <h3>Meter Readings</h3>
+  <table>
+    <thead><tr><th class="right">Start</th><th class="right">End</th></tr></thead>
+    <tbody>
+      <tr><td class="right">{{ logsheet.meter_start|default:'—' }}</td><td class="right">{{ logsheet.meter_end|default:'—' }}</td></tr>
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% if logsheet.operators %}
+<div class="section">
+  <h3>Operators</h3>
+  <table>
+    <thead><tr><th>Name</th><th>Check In</th><th>Check Out</th><th>Overtime</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for op in logsheet.operators %}
+      <tr>
+        <td>{{ op.operator_name }}</td>
+        <td>{{ op.check_in|default:'—' }}</td>
+        <td>{{ op.check_out|default:'—' }}</td>
+        <td>{{ op.overtime_hours|default:'—' }}</td>
+        <td>{% if op.is_present %}Present{% else %}Absent{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% if logsheet.breakdowns %}
+<div class="section">
+  <h3>Breakdowns</h3>
+  <table>
+    <thead><tr><th>Reason</th><th>Start</th><th>End</th><th>Duration (min)</th></tr></thead>
+    <tbody>
+      {% for bd in logsheet.breakdowns %}
+      <tr>
+        <td>{{ bd.reason_display }}</td>
+        <td>{{ bd.start_time|default:'—' }}</td>
+        <td>{{ bd.end_time|default:'—' }}</td>
+        <td>{{ bd.duration_minutes|default:'—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% if logsheet.fuel_entries %}
+<div class="section">
+  <h3>Fuel</h3>
+  <table>
+    <thead><tr><th>Liters</th><th>Rate/L</th><th class="right">Total Cost</th><th>Vendor</th></tr></thead>
+    <tbody>
+      {% for fl in logsheet.fuel_entries %}
+      <tr>
+        <td>{{ fl.liters }}</td>
+        <td>{{ fl.rate_per_liter|default:'—' }}</td>
+        <td class="right">₹{{ fl.total_cost|default:'—' }}</td>
+        <td>{{ fl.vendor|default:'—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+{% if logsheet.notes %}
+<div class="notes">
+  <h4>Notes</h4>
+  <p>{{ logsheet.notes }}</p>
+</div>
+{% endif %}
+
+<div class="footer">
+  <p>Generated by {{ logsheet.created_by_name|default:'System' }} | {% if logsheet.submitted_by_name %}Submitted by {{ logsheet.submitted_by_name }}{% endif %}</p>
+  <p>ERP Rental — Equipment Management System</p>
+</div>
+
+</body>
+</html>

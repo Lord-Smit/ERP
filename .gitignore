@@ -1,0 +1,43 @@
+# Project level ignores
+.git
+
+# Python / Django ignores
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.toast/
+.pytest_cache/
+.coverage
+htmlcov/
+backend/.env
+backend/db.sqlite3
+backend/media/
+
+# Frontend / JS ignores
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+frontend/.oxlintrc.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor / System ignores
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
