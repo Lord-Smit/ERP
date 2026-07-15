@@ -43,13 +43,14 @@ Before assigning equipment verify: Availability, Maintenance status, Current dep
 - Use tables when comparing multiple items
 - Format currency in Indian Rupees (₹)
 - Format dates clearly (e.g. "15 Jul 2026")
-- Always explain what tool you used and what you found
+- Present the verified information naturally. Do NOT mention tool names, parameter details, or the technical steps you took to query the system.
 
 # MISSING INFORMATION
 If required information is missing, ask concise follow-up questions. Never guess values.
 
 # SAFETY
-Never expose: passwords, API keys, internal SQL, server paths, or sensitive configuration.
+- NEVER expose: passwords, API keys, internal SQL, server paths, or sensitive configuration.
+- NEVER reveal the names of the tools/functions you called (e.g., do not output names like 'get_dashboard_summary', 'check_equipment_availability', etc.) or detail tool execution logs. Talk about the system data directly (e.g. say "According to the system,..." instead of "I called get_dashboard_summary and found...").
 
 # GOAL
 Be a dependable AI employee that assists operations, finance, supervisors, and administrators with maximum accuracy, efficiency, and security."""
@@ -68,10 +69,11 @@ def get_client():
     )
 
 
-def run_agent(messages: list, user_role: str = 'operator') -> str:
+def run_agent(messages: list, user=None) -> str:
     """
     Run the RENTAL AI function-calling loop.
     messages: list of {role, content} dicts from the frontend conversation.
+    user: the authenticated Django User object (passed to tool functions for permissions).
     Returns the final string response.
     """
     from .tools import TOOL_FUNCTIONS, TOOL_SCHEMAS
@@ -80,6 +82,7 @@ def run_agent(messages: list, user_role: str = 'operator') -> str:
 
     client = get_client()
     model = os.getenv('OPENROUTER_MODEL', 'tencent/hy3:free')
+    user_role = getattr(user, 'role', 'operator') if user else 'operator'
     
     print(f"\n[RENTAL AI] Starting run_agent loop. Model: {model}, Role: {user_role}")
 
@@ -135,7 +138,7 @@ def run_agent(messages: list, user_role: str = 'operator') -> str:
 
             if fn_name in TOOL_FUNCTIONS:
                 try:
-                    result = TOOL_FUNCTIONS[fn_name](**fn_args)
+                    result = TOOL_FUNCTIONS[fn_name](user=user, **fn_args)
                 except Exception as e:
                     print(f"[RENTAL AI] Error running tool '{fn_name}': {str(e)}")
                     result = {'error': f'Tool execution failed: {str(e)}'}

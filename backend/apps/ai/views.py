@@ -28,8 +28,7 @@ class ChatView(APIView):
 
         try:
             from .agent import run_agent
-            user_role = getattr(request.user, 'role', 'operator')
-            reply = run_agent(safe_messages, user_role=user_role)
+            reply = run_agent(safe_messages, user=request.user)
             return Response({'reply': reply})
         except Exception as e:
             return Response(

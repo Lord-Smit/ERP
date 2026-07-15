@@ -34,6 +34,9 @@ class QuotationViewSet(viewsets.ModelViewSet):
         return QuotationDetailSerializer
 
     def get_permissions(self):
+        if self.action == 'download_pdf':
+            from rest_framework.permissions import AllowAny
+            return [AllowAny()]
         if self.action == 'destroy':
             return [IsAuthenticated(), HasRole(['super_admin'])]
         if self.action in ('create', 'update', 'partial_update'):
@@ -207,6 +210,35 @@ class QuotationViewSet(viewsets.ModelViewSet):
                     unit_price=line.unit_price,
                     line_total=line.line_total,
                 )
+
+        # Trigger background email task to Super Admins
+        try:
+            import threading
+            from django.contrib.auth import get_user_model
+            from apps.crm.serializers import ContractDetailSerializer
+            from apps.invoices.serializers import InvoiceDetailSerializer, PaymentSerializer
+            from .utils import send_accepted_documents_email
+
+            User = get_user_model()
+            super_admins = list(User.objects.filter(role='super_admin', is_active=True).values_list('email', flat=True))
+
+            if super_admins:
+                quotation_data = QuotationDetailSerializer(quotation, context={'request': request}).data
+                contract_data = ContractDetailSerializer(contract, context={'request': request}).data
+                
+                invoice_serializer = InvoiceDetailSerializer(invoice, context={'request': request})
+                invoice_data = invoice_serializer.data
+                invoice_data['payments_list'] = PaymentSerializer(
+                    invoice.payments.all().order_by('-payment_date'), many=True
+                ).data
+
+                threading.Thread(
+                    target=send_accepted_documents_email,
+                    args=(super_admins, quotation_data, contract_data, invoice_data)
+                ).start()
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Failed to spawn background acceptance email thread: {str(e)}", exc_info=True)
 
         return Response({
             'status': 'accepted',

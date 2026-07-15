@@ -166,3 +166,20 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'AI-Powered Equipment Rental ERP System',
     'VERSION': '1.0.0',
 }
+
+# Email Configuration
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
+host_user = os.getenv('EMAIL_HOST_USER', '')
+host_pass = os.getenv('EMAIL_HOST_PASSWORD', '')
+
+if DEBUG:
+    if not host_user or not host_pass or host_pass == 'YOUR_GMAIL_APP_PASSWORD_HERE':
+        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'ERP Rental <smitcodingdata@gmail.com>')
+

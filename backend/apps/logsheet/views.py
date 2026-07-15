@@ -318,6 +318,9 @@ class LogsheetViewSet(viewsets.ModelViewSet):
             )
 
     def get_permissions(self):
+        if self.action == 'download_pdf':
+            from rest_framework.permissions import AllowAny
+            return [AllowAny()]
         if self.action in ('approve',):
             return [IsAuthenticated(), HasRole(['super_admin', 'operations_manager', 'field_supervisor'])]
         if self.action in ('submit',):

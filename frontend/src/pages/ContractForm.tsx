@@ -24,6 +24,7 @@ export default function ContractForm() {
     mobilization_charges: '', demobilization_charges: '',
     security_deposit: '', insurance_amount: '', insurance_policy_number: '',
     auto_renew: false, renewal_reminder_days: '30',
+    diesel_cost_covered_by: 'customer',
   });
 
   const [lineItems, setLineItems] = useState<Record<string, any>[]>([]);
@@ -59,6 +60,7 @@ export default function ContractForm() {
           insurance_policy_number: c.insurance_policy_number || '',
           auto_renew: c.auto_renew,
           renewal_reminder_days: c.renewal_reminder_days.toString(),
+          diesel_cost_covered_by: c.diesel_cost_covered_by || 'customer',
         });
         setLineItems(c.line_items.map((li) => ({
           equipment: li.equipment || '',
@@ -238,10 +240,17 @@ export default function ContractForm() {
               <input name="insurance_amount" type="number" step="0.01" value={form.insurance_amount} onChange={handleChange} className={inputClass} />
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <div>
               <label className={labelClass}>Insurance Policy No.</label>
               <input name="insurance_policy_number" value={form.insurance_policy_number} onChange={handleChange} className={inputClass} />
+            </div>
+            <div>
+              <label className={labelClass}>Diesel Cost Covered By</label>
+              <select name="diesel_cost_covered_by" value={form.diesel_cost_covered_by} onChange={handleChange} className={inputClass}>
+                <option value="customer">Customer</option>
+                <option value="us">Us</option>
+              </select>
             </div>
             <div>
               <label className={labelClass}>Auto Renew</label>

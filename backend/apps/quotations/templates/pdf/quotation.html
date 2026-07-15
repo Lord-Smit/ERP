@@ -5,19 +5,17 @@
 <style>
   @page { size: A4; margin: 12mm; }
   * { box-sizing: border-box; }
-  body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 10px; color: #1f2937; margin: 0; padding: 0; }
+  body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 12px; color: #1f2937; margin: 0; padding: 0; }
 
   hr { border: none; border-top: 2px solid #d1d5db; margin: 14px 0; }
 
-  .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
-  .logo-placeholder { width: 70px; height: 70px; background: #e5e7eb; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #9ca3af; }
-  .company-title { text-align: right; }
-  .company-title h1 { font-size: 18px; margin: 0; color: #1f2937; letter-spacing: 1px; }
+  .logo-placeholder { width: 75px; height: 75px; background: #e5e7eb; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #9ca3af; }
+  .company-title h1 { font-size: 20px; margin: 0; color: #1f2937; letter-spacing: 1px; }
 
   .doc-title { text-align: center; margin: 6px 0 14px 0; }
-  .doc-title h2 { font-size: 22px; margin: 0; letter-spacing: 3px; color: #1f2937; }
-  .doc-title .version-badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 8px; font-weight: bold; background: #f3f4f6; color: #6b7280; margin-left: 8px; vertical-align: middle; }
-  .doc-title .status-label { display: inline-block; padding: 3px 12px; border-radius: 10px; font-size: 9px; font-weight: bold; margin-top: 4px; }
+  .doc-title h2 { font-size: 24px; margin: 0; letter-spacing: 3px; color: #1f2937; }
+  .doc-title .version-badge { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 9px; font-weight: bold; background: #f3f4f6; color: #6b7280; margin-left: 8px; vertical-align: middle; }
+  .doc-title .status-label { display: inline-block; padding: 3px 12px; border-radius: 10px; font-size: 10px; font-weight: bold; margin-top: 4px; }
   .status-draft { background: #f3f4f6; color: #6b7280; }
   .status-under_review { background: #fef3c7; color: #d97706; }
   .status-sent { background: #dbeafe; color: #2563eb; }
@@ -25,37 +23,38 @@
   .status-rejected { background: #fee2e2; color: #dc2626; }
   .status-expired { background: #f3f4f6; color: #9ca3af; }
 
-  .info-grid { display: flex; justify-content: space-between; }
-  .info-grid .left-col { width: 55%; }
-  .info-grid .right-col { width: 40%; text-align: right; }
-  .info-grid .left-col p, .info-grid .right-col p { margin: 2px 0; font-size: 10px; }
-  .info-grid .left-col .label, .info-grid .right-col .label { color: #6b7280; font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+  table.items-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+  table.items-table th { background: #f9fafb; color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 10px; text-align: left; border-bottom: 1px solid #d1d5db; }
+  table.items-table th.right { text-align: right; }
+  table.items-table td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; font-size: 12px; }
+  table.items-table td.right { text-align: right; }
 
-  table { width: 100%; border-collapse: collapse; margin: 8px 0; }
-  thead th { background: #f9fafb; color: #6b7280; font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; padding: 7px 8px; text-align: left; border-bottom: 1px solid #d1d5db; }
-  thead th.right { text-align: right; }
-  tbody td { padding: 6px 8px; border-bottom: 1px solid #e5e7eb; font-size: 10px; }
-  tbody td.right { text-align: right; }
+  .totals-table { margin-left: auto; width: 250px; margin-top: 6px; border-collapse: collapse; }
+  .totals-table td { padding: 4px 8px; font-size: 12px; border: none; }
+  .totals-table td.label { text-align: left; color: #4b5563; }
+  .totals-table td.value { text-align: right; }
+  .totals-table .grand-total-row td { font-size: 15px; font-weight: bold; border-top: 2px solid #1f2937; border-bottom: 2px solid #1f2937; padding: 6px 8px; }
+  .totals-table .grand-total-row td.label { color: #1f2937; }
 
-  .totals { margin-left: auto; width: 230px; margin-top: 4px; }
-  .totals .row { display: flex; justify-content: space-between; padding: 3px 8px; font-size: 10px; }
-  .totals .row.grand { font-size: 13px; font-weight: bold; border-top: 2px solid #1f2937; border-bottom: 2px solid #1f2937; padding: 5px 8px; margin: 4px 0; }
+  .section { margin: 12px 0; }
+  .section .s-label { color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .section p { font-size: 12px; margin: 3px 0; }
 
-  .section { margin: 10px 0; }
-  .section .s-label { color: #6b7280; font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .section p { font-size: 10px; margin: 2px 0; }
-
-  .thankyou { text-align: center; margin-top: 16px; font-size: 11px; color: #6b7280; }
+  .thankyou { text-align: center; margin-top: 20px; font-size: 13px; color: #6b7280; }
 </style>
 </head>
 <body>
 
-<div class="top-row">
-  <div class="logo-placeholder">LOGO</div>
-  <div class="company-title">
-    <h1>ABC RENTALS</h1>
-  </div>
-</div>
+<table style="width:100%; border:none; margin-bottom:10px;">
+  <tr>
+    <td style="width:50%; border:none; padding:0; vertical-align:middle;"><div class="logo-placeholder">LOGO</div></td>
+    <td style="width:50%; border:none; padding:0; text-align:right; vertical-align:middle;">
+      <div class="company-title">
+        <h1>ABC RENTALS</h1>
+      </div>
+    </td>
+  </tr>
+</table>
 
 <hr>
 
@@ -65,32 +64,34 @@
   <span class="status-label status-{{ quotation.status }}">{{ quotation.status|title }}</span>
 </div>
 
-<div class="info-grid">
-  <div class="left-col">
-    <p class="label">Bill To</p>
-    <p><strong>{{ quotation.customer_name }}</strong></p>
-    {% if quotation.customer_email %}<p>{{ quotation.customer_email }}</p>{% endif %}
-    {% if quotation.customer_phone %}<p>{{ quotation.customer_phone }}</p>{% endif %}
-    {% if quotation.customer_address %}<p>{{ quotation.customer_address }}</p>{% endif %}
-    {% if quotation.customer_gst %}<p>GST: {{ quotation.customer_gst }}</p>{% endif %}
-  </div>
-  <div class="right-col">
-    <p class="label">Quotation No</p>
-    <p><strong>{{ quotation.quotation_number }}</strong></p>
-    <p class="label">Date</p>
-    <p>{{ quotation.created_at|slice:":10" }}</p>
-    <p class="label">Valid Until</p>
-    <p>{{ quotation.valid_until|default:'—' }}</p>
-  </div>
-</div>
+<table style="width:100%; border:none; margin-bottom:12px;">
+  <tr>
+    <td style="width:55%; vertical-align:top; border:none; padding:0;">
+      <p style="color:#6b7280; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; margin:0 0 4px 0;">Bill To</p>
+      <p style="margin:3px 0; font-size:12px;"><strong>{{ quotation.customer_name }}</strong></p>
+      {% if quotation.customer_email %}<p style="margin:3px 0; font-size:12px;">{{ quotation.customer_email }}</p>{% endif %}
+      {% if quotation.customer_phone %}<p style="margin:3px 0; font-size:12px;">{{ quotation.customer_phone }}</p>{% endif %}
+      {% if quotation.customer_address %}<p style="margin:3px 0; font-size:12px;">{{ quotation.customer_address }}</p>{% endif %}
+      {% if quotation.customer_gst %}<p style="margin:3px 0; font-size:12px;">GST: {{ quotation.customer_gst }}</p>{% endif %}
+    </td>
+    <td style="width:45%; vertical-align:top; border:none; padding:0; text-align:right;">
+      <p style="color:#6b7280; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; margin:0 0 4px 0;">Quotation No</p>
+      <p style="margin:3px 0; font-size:12px;"><strong>{{ quotation.quotation_number }}</strong></p>
+      <p style="color:#6b7280; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; margin:8px 0 4px 0;">Date</p>
+      <p style="margin:3px 0; font-size:12px;">{{ quotation.created_at|slice:":10" }}</p>
+      <p style="color:#6b7280; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; margin:8px 0 4px 0;">Valid Until</p>
+      <p style="margin:3px 0; font-size:12px;">{{ quotation.valid_until|default:'—' }}</p>
+    </td>
+  </tr>
+</table>
 
 <hr>
 
-<p style="font-size:8px;text-transform:uppercase;letter-spacing:0.5px;color:#6b7280;margin:6px 0 2px 0;">Rental Charges</p>
+<p style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:#6b7280;margin:6px 0 2px 0;">Rental Charges</p>
 
 <hr style="margin:4px 0;">
 
-<table>
+<table class="items-table">
   <thead>
     <tr>
       <th style="width:30%;">Equipment</th>
@@ -108,8 +109,8 @@
       <td class="right">{{ item.quantity }}</td>
       <td>{{ item.get_rental_period_display|default:item.rental_period|title }}</td>
       <td>{{ item.start_date|default:'—' }} — {{ item.end_date|default:'—' }}</td>
-      <td class="right">₹{{ item.unit_price|floatformat:2 }}</td>
-      <td class="right">₹{{ item.line_total|floatformat:2 }}</td>
+      <td class="right">Rs. {{ item.unit_price|floatformat:2 }}</td>
+      <td class="right">Rs. {{ item.line_total|floatformat:2 }}</td>
     </tr>
     {% empty %}
     <tr><td colspan="6" style="color:#9ca3af;text-align:center;padding:16px;">No line items</td></tr>
@@ -119,13 +120,22 @@
 
 <hr style="margin:4px 0;">
 
-<div class="totals">
-  <div class="row"><span>Subtotal</span><span>₹{{ quotation.subtotal|floatformat:2 }}</span></div>
+<table class="totals-table">
+  <tr>
+    <td class="label">Subtotal</td>
+    <td class="value">Rs. {{ quotation.subtotal|floatformat:2 }}</td>
+  </tr>
   {% if quotation.tax_amount %}
-  <div class="row"><span>GST ({{ quotation.tax_percentage }}%)</span><span>₹{{ quotation.tax_amount|floatformat:2 }}</span></div>
+  <tr>
+    <td class="label">GST ({{ quotation.tax_percentage }}%)</td>
+    <td class="value">Rs. {{ quotation.tax_amount|floatformat:2 }}</td>
+  </tr>
   {% endif %}
-  <div class="row grand"><span>GRAND TOTAL</span><span>₹{{ quotation.total_amount|floatformat:2 }}</span></div>
-</div>
+  <tr class="grand-total-row">
+    <td class="label">GRAND TOTAL</td>
+    <td class="value">Rs. {{ quotation.total_amount|floatformat:2 }}</td>
+  </tr>
+</table>
 
 <hr>
 

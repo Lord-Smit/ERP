@@ -117,3 +117,44 @@ class PaymentReminderTests(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.data['results']), 1)
         self.assertTrue(resp.data['results'][0]['is_resolved'])
+
+
+class ContractTests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.admin = User.objects.create_user(
+            email='admin@test.com', password='testpass123',
+            role='super_admin', is_active=True,
+        )
+        self.client.force_authenticate(user=self.admin)
+        self.customer = Customer.objects.create(
+            customer_code='C001', name='Test Customer',
+            email='cust@test.com', phone='9999999999',
+        )
+
+    def test_create_contract_default_diesel_cost(self):
+        payload = {
+            'contract_number': 'CON-001',
+            'contract_type': 'rental',
+            'start_date': '2026-08-01',
+            'status': 'draft',
+            'customer': str(self.customer.pk),
+        }
+        resp = self.client.post('/api/contracts/', payload, format='json')
+        self.assertEqual(resp.status_code, 201)
+        self.assertEqual(resp.data['contract_number'], 'CON-001')
+        self.assertEqual(resp.data['diesel_cost_covered_by'], 'customer')
+
+    def test_create_contract_custom_diesel_cost(self):
+        payload = {
+            'contract_number': 'CON-002',
+            'contract_type': 'rental',
+            'start_date': '2026-08-01',
+            'status': 'draft',
+            'customer': str(self.customer.pk),
+            'diesel_cost_covered_by': 'us',
+        }
+        resp = self.client.post('/api/contracts/', payload, format='json')
+        self.assertEqual(resp.status_code, 201)
+        self.assertEqual(resp.data['diesel_cost_covered_by'], 'us')
+

@@ -5,61 +5,60 @@
 <style>
   @page { size: A4; margin: 12mm; }
   * { box-sizing: border-box; }
-  body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 10px; color: #1f2937; margin: 0; padding: 0; }
+  body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 12px; color: #1f2937; margin: 0; padding: 0; }
 
   hr { border: none; border-top: 2px solid #d1d5db; margin: 14px 0; }
 
-  .top-row { display: flex; justify-content: space-between; align-items: flex-start; }
-  .logo-placeholder { width: 70px; height: 70px; background: #e5e7eb; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #9ca3af; }
-  .company-title { text-align: right; }
-  .company-title h1 { font-size: 18px; margin: 0; color: #1f2937; letter-spacing: 1px; }
+  .logo-placeholder { width: 75px; height: 75px; background: #e5e7eb; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #9ca3af; }
+  .company-title h1 { font-size: 20px; margin: 0; color: #1f2937; letter-spacing: 1px; }
 
   .invoice-title { text-align: center; margin: 6px 0 14px 0; }
-  .invoice-title h2 { font-size: 22px; margin: 0; letter-spacing: 3px; color: #1f2937; }
-  .invoice-title .status-label { display: inline-block; padding: 3px 12px; border-radius: 10px; font-size: 9px; font-weight: bold; margin-top: 4px; }
+  .invoice-title h2 { font-size: 24px; margin: 0; letter-spacing: 3px; color: #1f2937; }
+  .invoice-title .status-label { display: inline-block; padding: 3px 12px; border-radius: 10px; font-size: 10px; font-weight: bold; margin-top: 4px; }
   .status-draft { background: #f3f4f6; color: #6b7280; }
   .status-sent { background: #dbeafe; color: #2563eb; }
   .status-paid { background: #d1fae5; color: #059669; }
   .status-overdue { background: #fee2e2; color: #dc2626; }
   .status-cancelled { background: #f3f4f6; color: #9ca3af; }
 
-  .info-grid { display: flex; justify-content: space-between; }
-  .info-grid .left-col { width: 55%; }
-  .info-grid .right-col { width: 40%; text-align: right; }
-  .info-grid .left-col p, .info-grid .right-col p { margin: 2px 0; font-size: 10px; }
-  .info-grid .left-col .label, .info-grid .right-col .label { color: #6b7280; font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
-
   .contract-info { margin: 4px 0 10px 0; }
-  .contract-info p { margin: 2px 0; font-size: 10px; }
-  .contract-info .ci-label { color: #6b7280; font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .contract-info p { margin: 3px 0; font-size: 12px; }
+  .contract-info .ci-label { color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  table { width: 100%; border-collapse: collapse; margin: 8px 0; }
-  thead th { background: #f9fafb; color: #6b7280; font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; padding: 7px 8px; text-align: left; border-bottom: 1px solid #d1d5db; }
-  thead th.right { text-align: right; }
-  tbody td { padding: 6px 8px; border-bottom: 1px solid #e5e7eb; font-size: 10px; }
-  tbody td.right { text-align: right; }
+  table.items-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+  table.items-table th { background: #f9fafb; color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 10px; text-align: left; border-bottom: 1px solid #d1d5db; }
+  table.items-table th.right { text-align: right; }
+  table.items-table td { padding: 8px 10px; border-bottom: 1px solid #e5e7eb; font-size: 12px; }
+  table.items-table td.right { text-align: right; }
 
-  .totals { margin-left: auto; width: 230px; margin-top: 4px; }
-  .totals .row { display: flex; justify-content: space-between; padding: 3px 8px; font-size: 10px; }
-  .totals .row.grand { font-size: 13px; font-weight: bold; border-top: 2px solid #1f2937; border-bottom: 2px solid #1f2937; padding: 5px 8px; margin: 4px 0; }
-  .totals .row.paid { color: #059669; }
-  .totals .row.balance { font-size: 11px; font-weight: bold; color: #dc2626; }
+  .totals-table { margin-left: auto; width: 250px; margin-top: 6px; border-collapse: collapse; }
+  .totals-table td { padding: 4px 8px; font-size: 12px; border: none; }
+  .totals-table td.label { text-align: left; color: #4b5563; }
+  .totals-table td.value { text-align: right; }
+  .totals-table .grand-total-row td { font-size: 15px; font-weight: bold; border-top: 2px solid #1f2937; border-bottom: 2px solid #1f2937; padding: 6px 8px; margin: 6px 0; }
+  .totals-table .grand-total-row td.label { color: #1f2937; }
+  .totals-table tr.paid td { color: #059669; }
+  .totals-table tr.balance td { font-size: 13px; font-weight: bold; color: #dc2626; }
 
-  .notes { margin: 10px 0; }
-  .notes .n-label { color: #6b7280; font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .notes p { font-size: 10px; margin: 2px 0; }
+  .notes { margin: 12px 0; }
+  .notes .n-label { color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .notes p { font-size: 12px; margin: 3px 0; }
 
-  .thankyou { text-align: center; margin-top: 16px; font-size: 11px; color: #6b7280; }
+  .thankyou { text-align: center; margin-top: 20px; font-size: 13px; color: #6b7280; }
 </style>
 </head>
 <body>
 
-<div class="top-row">
-  <div class="logo-placeholder">LOGO</div>
-  <div class="company-title">
-    <h1>ABC RENTALS</h1>
-  </div>
-</div>
+<table style="width:100%; border:none; margin-bottom:10px;">
+  <tr>
+    <td style="width:50%; border:none; padding:0; vertical-align:middle;"><div class="logo-placeholder">LOGO</div></td>
+    <td style="width:50%; border:none; padding:0; text-align:right; vertical-align:middle;">
+      <div class="company-title">
+        <h1>ABC RENTALS</h1>
+      </div>
+    </td>
+  </tr>
+</table>
 
 <hr>
 
@@ -68,24 +67,26 @@
   <span class="status-label status-{{ invoice.status }}">{{ invoice.status|title }}</span>
 </div>
 
-<div class="info-grid">
-  <div class="left-col">
-    <p class="label">Bill To</p>
-    <p><strong>{{ invoice.customer_name }}</strong></p>
-    {% if invoice.customer_email %}<p>{{ invoice.customer_email }}</p>{% endif %}
-    {% if invoice.customer_phone %}<p>{{ invoice.customer_phone }}</p>{% endif %}
-    {% if invoice.customer_address %}<p>{{ invoice.customer_address }}</p>{% endif %}
-    {% if invoice.customer_gst %}<p>GST: {{ invoice.customer_gst }}</p>{% endif %}
-  </div>
-  <div class="right-col">
-    <p class="label">Invoice No</p>
-    <p><strong>{{ invoice.invoice_number }}</strong></p>
-    <p class="label">Date</p>
-    <p>{{ invoice.issue_date }}</p>
-    <p class="label">Due Date</p>
-    <p>{{ invoice.due_date }}</p>
-  </div>
-</div>
+<table style="width:100%; border:none; margin-bottom:12px;">
+  <tr>
+    <td style="width:55%; vertical-align:top; border:none; padding:0;">
+      <p style="color:#6b7280; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; margin:0 0 4px 0;">Bill To</p>
+      <p style="margin:3px 0; font-size:12px;"><strong>{{ invoice.customer_name }}</strong></p>
+      {% if invoice.customer_email %}<p style="margin:3px 0; font-size:12px;">{{ invoice.customer_email }}</p>{% endif %}
+      {% if invoice.customer_phone %}<p style="margin:3px 0; font-size:12px;">{{ invoice.customer_phone }}</p>{% endif %}
+      {% if invoice.customer_address %}<p style="margin:3px 0; font-size:12px;">{{ invoice.customer_address }}</p>{% endif %}
+      {% if invoice.customer_gst %}<p style="margin:3px 0; font-size:12px;">GST: {{ invoice.customer_gst }}</p>{% endif %}
+    </td>
+    <td style="width:45%; vertical-align:top; border:none; padding:0; text-align:right;">
+      <p style="color:#6b7280; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; margin:0 0 4px 0;">Invoice No</p>
+      <p style="margin:3px 0; font-size:12px;"><strong>{{ invoice.invoice_number }}</strong></p>
+      <p style="color:#6b7280; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; margin:8px 0 4px 0;">Date</p>
+      <p style="margin:3px 0; font-size:12px;">{{ invoice.issue_date }}</p>
+      <p style="color:#6b7280; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; margin:8px 0 4px 0;">Due Date</p>
+      <p style="margin:3px 0; font-size:12px;">{{ invoice.due_date }}</p>
+    </td>
+  </tr>
+</table>
 
 <hr>
 
@@ -100,11 +101,11 @@
 
 <hr>
 
-<p style="font-size:8px;text-transform:uppercase;letter-spacing:0.5px;color:#6b7280;margin:6px 0 2px 0;">Rental Charges</p>
+<p style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:#6b7280;margin:6px 0 2px 0;">Rental Charges</p>
 
 <hr style="margin:4px 0;">
 
-<table>
+<table class="items-table">
   <thead>
     <tr>
       <th style="width:40%;">Equipment</th>
@@ -119,9 +120,9 @@
     <tr>
       <td>{{ item.description }}</td>
       <td class="right">{{ item.quantity|floatformat:0 }}</td>
-      <td class="right">₹{{ item.unit_price|floatformat:2 }}</td>
+      <td class="right">Rs. {{ item.unit_price|floatformat:2 }}</td>
       <td class="right">{{ item.quantity|floatformat:0 }}</td>
-      <td class="right">₹{{ item.line_total|floatformat:2 }}</td>
+      <td class="right">Rs. {{ item.line_total|floatformat:2 }}</td>
     </tr>
     {% empty %}
     <tr><td colspan="5" style="color:#9ca3af;text-align:center;padding:16px;">No line items</td></tr>
@@ -131,17 +132,32 @@
 
 <hr style="margin:4px 0;">
 
-<div class="totals">
-  <div class="row"><span>Subtotal</span><span>₹{{ invoice.subtotal|floatformat:2 }}</span></div>
+<table class="totals-table">
+  <tr>
+    <td class="label">Subtotal</td>
+    <td class="value">Rs. {{ invoice.subtotal|floatformat:2 }}</td>
+  </tr>
   {% if invoice.tax_amount %}
-  <div class="row"><span>GST</span><span>₹{{ invoice.tax_amount|floatformat:2 }}</span></div>
+  <tr>
+    <td class="label">GST</td>
+    <td class="value">Rs. {{ invoice.tax_amount|floatformat:2 }}</td>
+  </tr>
   {% endif %}
-  <div class="row grand"><span>GRAND TOTAL</span><span>₹{{ invoice.total_amount|floatformat:2 }}</span></div>
+  <tr class="grand-total-row">
+    <td class="label">GRAND TOTAL</td>
+    <td class="value">Rs. {{ invoice.total_amount|floatformat:2 }}</td>
+  </tr>
   {% if invoice.paid_amount and invoice.paid_amount > 0 %}
-  <div class="row paid"><span>Paid</span><span>₹{{ invoice.paid_amount|floatformat:2 }}</span></div>
-  <div class="row balance"><span>Balance Due</span><span>₹{{ invoice.balance_due|floatformat:2 }}</span></div>
+  <tr class="paid">
+    <td class="label">Paid</td>
+    <td class="value">Rs. {{ invoice.paid_amount|floatformat:2 }}</td>
+  </tr>
+  <tr class="balance">
+    <td class="label">Balance Due</td>
+    <td class="value">Rs. {{ invoice.balance_due|floatformat:2 }}</td>
+  </tr>
   {% endif %}
-</div>
+</table>
 
 <hr>
 

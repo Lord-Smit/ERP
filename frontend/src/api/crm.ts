@@ -129,6 +129,7 @@ export interface ContractDetail {
   insurance_policy_number: string;
   auto_renew: boolean;
   renewal_reminder_days: number;
+  diesel_cost_covered_by: 'us' | 'customer';
   signed_by_client: boolean;
   signed_at: string | null;
   amendment_number: number;
@@ -172,6 +173,7 @@ export interface Contract {
   insurance_policy_number: string;
   auto_renew: boolean;
   renewal_reminder_days: number;
+  diesel_cost_covered_by: 'us' | 'customer';
   signed_by_client: boolean;
   signed_at: string | null;
   amendment_number: number;

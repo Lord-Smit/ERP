@@ -105,6 +105,14 @@ class Contract(models.Model):
     insurance_policy_number = models.CharField(max_length=100, blank=True)
     auto_renew = models.BooleanField(default=False)
     renewal_reminder_days = models.PositiveIntegerField(default=30)
+    diesel_cost_covered_by = models.CharField(
+        max_length=20,
+        choices=[
+            ('us', 'Us'),
+            ('customer', 'Customer'),
+        ],
+        default='customer'
+    )
     signed_by_client = models.BooleanField(default=False)
     signed_at = models.DateTimeField(null=True, blank=True)
     amendment_number = models.PositiveIntegerField(default=0)

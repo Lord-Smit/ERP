@@ -32,6 +32,9 @@ class InvoiceViewSet(viewsets.ModelViewSet):
         return InvoiceDetailSerializer
 
     def get_permissions(self):
+        if self.action == 'download_pdf':
+            from rest_framework.permissions import AllowAny
+            return [AllowAny()]
         if self.action == 'destroy':
             return [IsAuthenticated(), HasRole(['super_admin'])]
         if self.action in ('create', 'update', 'partial_update', 'generate_from_logsheets'):
@@ -346,6 +349,9 @@ class PaymentViewSet(viewsets.ModelViewSet):
     filterset_fields = ['invoice', 'payment_mode', 'payment_date']
 
     def get_permissions(self):
+        if self.action == 'download_pdf':
+            from rest_framework.permissions import AllowAny
+            return [AllowAny()]
         if self.action in ('create', 'update', 'partial_update', 'destroy'):
             return [IsAuthenticated(), HasRole(['super_admin', 'operations_manager', 'finance'])]
         return [IsAuthenticated()]

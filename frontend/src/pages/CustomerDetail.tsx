@@ -331,6 +331,7 @@ function ContractsSection({ customerId, contracts, onUpdate, inputClass, labelCl
     mobilization_charges: '', demobilization_charges: '',
     security_deposit: '', insurance_amount: '', insurance_policy_number: '',
     auto_renew: false, renewal_reminder_days: '30',
+    diesel_cost_covered_by: 'customer',
   };
   const [form, setForm] = useState<Record<string, any>>(initialState);
   const [submitting, setSubmitting] = useState(false);
@@ -370,6 +371,7 @@ function ContractsSection({ customerId, contracts, onUpdate, inputClass, labelCl
       insurance_policy_number: (c as any).insurance_policy_number || '',
       auto_renew: (c as any).auto_renew || false,
       renewal_reminder_days: ((c as any).renewal_reminder_days || 30).toString(),
+      diesel_cost_covered_by: (c as any).diesel_cost_covered_by || 'customer',
     });
     setEditId(c.id); setAdding(true);
   };
@@ -449,6 +451,13 @@ function ContractsSection({ customerId, contracts, onUpdate, inputClass, labelCl
               <div>
                 <label className={labelClass}>Policy No.</label>
                 <input name="insurance_policy_number" value={form.insurance_policy_number} onChange={handleChange} className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Diesel Cost Covered By</label>
+                <select name="diesel_cost_covered_by" value={form.diesel_cost_covered_by} onChange={handleChange} className={inputClass}>
+                  <option value="customer">Customer</option>
+                  <option value="us">Us</option>
+                </select>
               </div>
               <div>
                 <label className={labelClass}>Reminder (days)</label>

@@ -101,6 +101,9 @@ class TopLevelContractViewSet(viewsets.ModelViewSet):
         return ContractDetailSerializer
 
     def get_permissions(self):
+        if self.action == 'download_pdf':
+            from rest_framework.permissions import AllowAny
+            return [AllowAny()]
         if self.action in ('create', 'update', 'partial_update', 'destroy'):
             return [IsAuthenticated(), HasRole(['super_admin', 'operations_manager', 'finance'])]
         return [IsAuthenticated()]

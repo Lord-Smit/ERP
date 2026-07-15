@@ -162,6 +162,7 @@ export default function ContractDetail() {
               <div><span className="text-gray-500 block">Security Deposit</span><span className="font-medium">{c.security_deposit ? `₹${Number(c.security_deposit).toLocaleString()}` : '—'}</span></div>
               <div><span className="text-gray-500 block">Insurance</span><span className="font-medium">{c.insurance_amount ? `₹${Number(c.insurance_amount).toLocaleString()}` : '—'}</span></div>
               <div><span className="text-gray-500 block">Policy No.</span><span className="font-medium">{c.insurance_policy_number || '—'}</span></div>
+              <div><span className="text-gray-500 block">Diesel Cost</span><span className="font-medium">{c.diesel_cost_covered_by === 'us' ? 'Covered by Us' : 'Covered by Customer'}</span></div>
               <div><span className="text-gray-500 block">Amendments</span><span className="font-medium">{c.amendment_number}</span></div>
               <div><span className="text-gray-500 block">Signed</span><span className="font-medium">{c.signed_by_client ? (c.signed_at ? new Date(c.signed_at).toLocaleDateString() : 'Yes') : 'No'}</span></div>
             </div>
